@@ -12,12 +12,25 @@ const nextConfig: NextConfig = {
         pathname: '/uploads/**',
       },
       {
-        // konfigurasi guna untuk mengizinkan localhost ip 
+        // konfigurasi untuk mengizinkan localhost ip 
         // ip hostname disetting agar dapat mengizinkan domain dari server luar localhost        
         protocol: 'http',
         hostname: '127.0.0.1',
         port: '5000',
         pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
       },
     ],
   },

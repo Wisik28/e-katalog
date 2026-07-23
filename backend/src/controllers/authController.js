@@ -40,8 +40,8 @@ const login = async (req, res) => {
 // Seed default admin accounts from .env
 const seedAdmin = async () => {
   try {
-    const envEmail = process.env.NEXT_PUBLIC_API_USERNAME;
-    const password = process.env.NEXT_PUBLIC_API_PASSWORD;
+    const envEmail = process.env.ADMIN_EMAIL || process.env.NEXT_PUBLIC_API_USERNAME;
+    const password = process.env.ADMIN_PASSWORD || process.env.NEXT_PUBLIC_API_PASSWORD;
 
     if (!envEmail || !password) {
       // Skip seeding if env credentials are not provided
@@ -49,18 +49,23 @@ const seedAdmin = async () => {
     }
 
     const normalizedEmail = envEmail.toLowerCase();
-    const adminExists = await Admin.findOne({ email: normalizedEmail });
-    if (!adminExists) {
+    const admin = await Admin.findOne({ email: normalizedEmail });
+    if (!admin) {
       await Admin.create({
         email: normalizedEmail,
         password,
       });
       console.log(`Admin account seeded: ${normalizedEmail}`);
+    } else {
+      // Update password if changed in .env
+      admin.password = password;
+      await admin.save();
     }
   } catch (error) {
     console.error('Error seeding admin accounts:', error.message);
   }
 };
+
 
 module.exports = {
   login,

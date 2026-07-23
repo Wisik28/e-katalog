@@ -5,14 +5,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCreateProduct } from '@/hooks/useProducts';
 
-const CATEGORIES = ['Dress', 'Blouse', 'Rok', 'Kemeja', 'Outer', 'Celana', 'Tunik', 'Aksesoris'];
+const CATEGORIES = ['Dress', 'Blouse', 'Rok', 'Kemeja', 'Outer', 'Celana', 'Tunik'];
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Free Size'];
 
 export default function CreateProductPage() {
   const router = useRouter();
   const fileInputRef = useRef(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [imageFiles, setImageFiles] = useState([]);
+  const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0);
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [error, setError] = useState('');
   const [form, setForm] = useState({
@@ -20,6 +21,7 @@ export default function CreateProductPage() {
     category: '',
     price: '',
     stock: '',
+    discount: '',
     description: '',
     material: '',
     color: '',
@@ -33,17 +35,35 @@ export default function CreateProductPage() {
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setImageFile(file);
-    const reader = new FileReader();
-    reader.onloadend = () => setImagePreview(reader.result);
-    reader.readAsDataURL(file);
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setImageFiles((prev) => [...prev, ...files]);
+
+    const readPromises = files.map((file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(readPromises).then((results) => {
+      setImagePreviews((prev) => {
+        const nextPreviews = [...prev, ...results];
+        setCurrentPreviewIndex(prev.length);
+        return nextPreviews;
+      });
+    });
   };
 
-  const handleRemoveImage = () => {
-    setImageFile(null);
-    setImagePreview(null);
+  const handleRemoveCurrentImage = () => {
+    setImagePreviews((prev) => {
+      const nextPreviews = prev.filter((_, idx) => idx !== currentPreviewIndex);
+      setCurrentPreviewIndex(Math.max(0, currentPreviewIndex - 1));
+      return nextPreviews;
+    });
+    setImageFiles((prev) => prev.filter((_, idx) => idx !== currentPreviewIndex));
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -68,13 +88,14 @@ export default function CreateProductPage() {
     formData.append('category', form.category);
     formData.append('price', form.price);
     formData.append('stock', form.stock || '0');
+    formData.append('discount', form.discount || '0');
     formData.append('description', form.description);
     formData.append('material', form.material);
     formData.append('color', form.color);
     formData.append('sizes', JSON.stringify(selectedSizes));
-    if (imageFile) {
-      formData.append('image', imageFile);
-    }
+    imageFiles.forEach((file) => {
+      formData.append('image', file);
+    });
 
     createProduct(formData, {
       onSuccess: () => router.push('/admin/products'),
@@ -120,12 +141,51 @@ export default function CreateProductPage() {
             {/* Image upload */}
             <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl p-5 shadow-sm">
               <h2 className="text-slate-900 dark:text-white font-semibold mb-4">Foto Produk</h2>
-              <label htmlFor="product-image" className="block cursor-pointer group">
-                <div className={`aspect-square rounded-xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden transition-all duration-200 ${imagePreview ? 'border-purple-500/40' : 'border-slate-200 dark:border-white/10 hover:border-purple-500/40'}`}>
-                  {imagePreview ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                  ) : (
+              {imagePreviews.length > 0 ? (
+                <div className="aspect-square rounded-xl border-2 border-dashed border-purple-500/40 flex flex-col items-center justify-center overflow-hidden transition-all duration-200">
+                  <div className="relative w-full h-full group/preview">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={imagePreviews[currentPreviewIndex]} alt="Preview" className="w-full h-full object-cover" />
+                    
+                    {imagePreviews.length > 1 && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setCurrentPreviewIndex((prev) => (prev === 0 ? imagePreviews.length - 1 : prev - 1));
+                          }}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors shadow"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setCurrentPreviewIndex((prev) => (prev === imagePreviews.length - 1 ? 0 : prev + 1));
+                          }}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors shadow"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </>
+                    )}
+
+                    <div className="absolute bottom-2 right-2 px-2.5 py-1 rounded-md bg-black/60 text-white text-[10px] font-bold font-sans tracking-wide">
+                      {currentPreviewIndex + 1} / {imagePreviews.length}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <label htmlFor="product-image" className="block cursor-pointer group">
+                  <div className="aspect-square rounded-xl border-2 border-dashed border-slate-200 dark:border-white/10 hover:border-purple-500/40 flex flex-col items-center justify-center overflow-hidden transition-all duration-200">
                     <div className="text-center p-6">
                       <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mx-auto mb-3 group-hover:bg-purple-500/20 transition-colors">
                         <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,23 +193,37 @@ export default function CreateProductPage() {
                         </svg>
                       </div>
                       <p className="text-slate-700 dark:text-slate-400 text-sm font-medium">Klik untuk upload foto</p>
-                      <p className="text-slate-400 dark:text-slate-600 text-xs mt-1">JPG, JPEG, PNG, WEBP maks 5MB</p>
+                      <p className="text-slate-400 dark:text-slate-600 text-xs mt-1">JPG, JPEG, PNG, WEBP maks 5MB (bisa pilih banyak)</p>
                     </div>
-                  )}
+                  </div>
+                </label>
+              )}
+              <input
+                id="product-image"
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+                multiple
+              />
+              {imagePreviews.length > 0 && (
+                <div className="flex gap-2 mt-3">
+                  <button
+                    type="button"
+                    onClick={handleRemoveCurrentImage}
+                    className="flex-1 py-2 text-xs text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl transition-all font-medium"
+                  >
+                    Hapus
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex-1 py-2 text-xs text-purple-600 hover:bg-purple-50 dark:text-purple-400 dark:hover:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 rounded-xl transition-all font-medium"
+                  >
+                    Tambahkan
+                  </button>
                 </div>
-                <input
-                  id="product-image"
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                />
-              </label>
-              {imagePreview && (
-                <button type="button" onClick={handleRemoveImage} className="mt-3 w-full py-2 text-xs text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl transition-all">
-                  Hapus Foto
-                </button>
               )}
             </div>
 
@@ -204,22 +278,28 @@ export default function CreateProductPage() {
                 </div>
               </div>
 
-              {/* Stock & Color */}
+              {/* Stock & Discount */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-slate-700 dark:text-slate-300 text-sm font-medium mb-1.5">Stok</label>
                   <input id="product-stock" type="number" name="stock" value={form.stock} onChange={handleChange} placeholder="0" min={0} className="w-full px-4 py-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-colors duration-300" />
                 </div>
                 <div>
-                  <label className="block text-slate-700 dark:text-slate-300 text-sm font-medium mb-1.5">Warna</label>
-                  <input id="product-color" type="text" name="color" value={form.color} onChange={handleChange} placeholder="contoh: Lavender, Putih" className="w-full px-4 py-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-colors duration-300" />
+                  <label className="block text-slate-700 dark:text-slate-300 text-sm font-medium mb-1.5">Diskon (%)</label>
+                  <input id="product-discount" type="number" name="discount" value={form.discount} onChange={handleChange} placeholder="0" min={0} max={100} className="w-full px-4 py-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-colors duration-300" />
                 </div>
               </div>
 
-              {/* Material */}
-              <div>
-                <label className="block text-slate-700 dark:text-slate-300 text-sm font-medium mb-1.5">Bahan</label>
-                <input id="product-material" type="text" name="material" value={form.material} onChange={handleChange} placeholder="contoh: Katun, Linen, Polyester" className="w-full px-4 py-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-colors duration-300" />
+              {/* Color & Material */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-300 text-sm font-medium mb-1.5">Warna</label>
+                  <input id="product-color" type="text" name="color" value={form.color} onChange={handleChange} placeholder="contoh: Lavender, Putih" className="w-full px-4 py-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-colors duration-300" />
+                </div>
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-300 text-sm font-medium mb-1.5">Bahan</label>
+                  <input id="product-material" type="text" name="material" value={form.material} onChange={handleChange} placeholder="contoh: Katun, Linen, Polyester" className="w-full px-4 py-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-colors duration-300" />
+                </div>
               </div>
 
               {/* Description */}

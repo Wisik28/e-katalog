@@ -21,6 +21,12 @@ const ProductSchema = new mongoose.Schema({
     default: 0,
     min: 0,
   },
+  discount: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 100,
+  },
   description: {
     type: String,
     trim: true,
@@ -38,8 +44,7 @@ const ProductSchema = new mongoose.Schema({
     default: [],
   },
   image: {
-    type: String,
-    trim: true,
+    type: mongoose.Schema.Types.Mixed,
   },
 }, {
   timestamps: true,
