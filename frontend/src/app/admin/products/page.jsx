@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useProducts, useDeleteProduct } from '@/hooks/useProducts';
 
-const CATEGORIES = ['Semua', 'Dress', 'Blouse', 'Rok', 'Kemeja', 'Outer', 'Celana', 'Tunik', 'Aksesoris'];
+const CATEGORIES = ['Semua', 'Dress', 'Blouse', 'Rok', 'Kemeja', 'Outer', 'Celana', 'Tunik'];
 
 function formatRupiah(amount) {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
@@ -26,13 +26,22 @@ function SkeletonRow() {
 
 export default function AdminProductsPage() {
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Semua');
   const [viewMode, setViewMode] = useState('table');
   const [deleteModal, setDeleteModal] = useState(null); // product object | null
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [search]);
+
   // Build filters only for actual API params (don't send 'Semua' as category)
   const filters = {
-    ...(search && { search }),
+    ...(debouncedSearch.trim() && { search: debouncedSearch.trim() }),
     ...(selectedCategory !== 'Semua' && { category: selectedCategory }),
   };
 
@@ -185,7 +194,20 @@ export default function AdminProductsPage() {
                               {product.category}
                             </span>
                           </td>
-                          <td className="px-5 py-4 text-slate-800 dark:text-slate-300 text-sm font-medium">{formatRupiah(product.price)}</td>
+                          <td className="px-5 py-4 text-slate-800 dark:text-slate-300 text-sm font-medium">
+                            {product.discount > 0 ? (
+                              <div className="flex flex-col">
+                                <span className="text-xs text-slate-400 dark:text-slate-500 line-through font-normal">
+                                  {formatRupiah(product.price)}
+                                </span>
+                                <span className="text-sm font-semibold text-slate-900 dark:text-white mt-0.5">
+                                  {formatRupiah(product.price * (1 - product.discount / 100))}
+                                </span>
+                              </div>
+                            ) : (
+                              formatRupiah(product.price)
+                            )}
+                          </td>
                           <td className="px-5 py-4 text-slate-600 dark:text-slate-300 text-sm">
                             <span className={isOutOfStock ? 'text-red-500 font-medium' : ''}>{product.stock} pcs</span>
                           </td>
@@ -248,7 +270,18 @@ export default function AdminProductsPage() {
                     </span>
                   </div>
                   <p className="text-slate-500 dark:text-slate-400 text-xs mb-3">{product.category} · {product.stock} pcs</p>
-                  <p className="text-purple-600 dark:text-purple-400 font-semibold text-sm mb-3">{formatRupiah(product.price)}</p>
+                  {product.discount > 0 ? (
+                    <div className="flex flex-col mb-3">
+                      <span className="text-xs text-slate-400 dark:text-slate-500 line-through font-normal">
+                        {formatRupiah(product.price)}
+                      </span>
+                      <span className="text-purple-600 dark:text-purple-400 font-semibold text-sm mt-0.5">
+                        {formatRupiah(product.price * (1 - product.discount / 100))}
+                      </span>
+                    </div>
+                  ) : (
+                    <p className="text-purple-600 dark:text-purple-400 font-semibold text-sm mb-3">{formatRupiah(product.price)}</p>
+                  )}
                   <div className="flex gap-2">
                     <Link
                       href={`/admin/products/edit/${product._id}`}

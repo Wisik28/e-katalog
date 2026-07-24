@@ -1,60 +1,88 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto border-t border-slate-200 dark:border-white/5 bg-white dark:bg-slate-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-          {/* Brand */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
+    <footer id="footer" className="bg-[#1A1A1A] text-white pt-16 pb-12 border-t border-[#333333]">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+          {/* Brand Info */}
+          <div className="space-y-4 md:col-span-1">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center relative overflow-hidden flex-shrink-0">
+                <Image
+                  src="/logo_vivien_store.png"
+                  alt="Logo Vivien's Store"
+                  fill
+                  className="object-cover"
+                />
               </div>
-              <span className="text-slate-900 dark:text-white font-semibold text-sm">Vivien&apos;s Store</span>
+              <span className="font-serif font-bold text-xl text-white">
+                Vivien&apos;s Store
+              </span>
             </div>
-            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              Toko online terpercaya dengan koleksi produk berkualitas pilihan.
+            <p className="text-sm text-gray-400 leading-relaxed">
+              Platform katalog busana & aksesoris pilihan berkualitas tinggi dengan rancangan timeless dan gaya kasual elegan.
             </p>
           </div>
 
-          {/* Links */}
+          {/* Navigation Links */}
           <div>
-            <h3 className="text-slate-900 dark:text-white font-medium text-sm mb-3">Navigasi</h3>
-            <ul className="space-y-2">
-              {[
-                { label: 'Beranda', href: '/' },
-                { label: 'Produk', href: '/#produk' },
-              ].map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-sm transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+            <h4 className="font-sans font-semibold text-xs text-[#C89B3C] uppercase tracking-widest mb-4">
+              Koleksi & Menu
+            </h4>
+            <ul className="space-y-2.5 text-sm text-gray-300">
+              <li>
+                <Link href="/" className="hover:text-[#C89B3C] transition-colors">Beranda</Link>
+              </li>
+              <li>
+                <Link href="#categories" className="hover:text-[#C89B3C] transition-colors">Kategori Populer</Link>
+              </li>
+              <li>
+                <Link href="#produk" className="hover:text-[#C89B3C] transition-colors">Koleksi Terbaru</Link>
+              </li>
+              <li>
+                <Link href="#produk" className="hover:text-[#C89B3C] transition-colors">Produk Pilihan</Link>
+              </li>
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Customer Service */}
           <div>
-            <h3 className="text-slate-900 dark:text-white font-medium text-sm mb-3">Kontak</h3>
-            <ul className="space-y-2 text-sm text-slate-500 dark:text-slate-400">
-              <li>admin@viviensstore.com</li>
+            <h4 className="font-sans font-semibold text-xs text-[#C89B3C] uppercase tracking-widest mb-4">
+              Layanan Pelanggan
+            </h4>
+            <ul className="space-y-2.5 text-sm text-gray-300">
+              <li><span className="hover:text-white cursor-pointer">Panduan Ukuran</span></li>
+              <li><span className="hover:text-white cursor-pointer">Informasi Pengiriman</span></li>
+              <li><span className="hover:text-white cursor-pointer">Pertanyaan Umum (FAQ)</span></li>
+              <li><span className="hover:text-white cursor-pointer">Kebijakan Privasi</span></li>
             </ul>
+          </div>
+
+          {/* Contact & Newsletter */}
+          <div>
+            <h4 className="font-sans font-semibold text-xs text-[#C89B3C] uppercase tracking-widest mb-4">
+              Kontak Kami
+            </h4>
+            <p className="text-sm text-gray-300 mb-2">
+              Email: <a href="mailto:admin@viviensstore.com" className="text-[#C89B3C] hover:underline">admin@viviensstore.com</a>
+            </p>
+            <p className="text-sm text-gray-400">
+              Senin - Sabtu (09:00 - 17:00 WIB)
+            </p>
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-100 dark:border-white/5 text-center">
-          <p className="text-slate-400 dark:text-slate-600 text-xs">
-            &copy; {year} Vivien&apos;s Store. All rights reserved.
-          </p>
+        {/* Bottom Bar */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+          <p>&copy; {year} Vivien&apos;s Store. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <span className="hover:text-white cursor-pointer">Terms of Service</span>
+            <span className="hover:text-white cursor-pointer">Privacy Policy</span>
+          </div>
         </div>
       </div>
     </footer>
