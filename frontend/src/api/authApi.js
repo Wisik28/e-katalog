@@ -8,43 +8,64 @@ const ENDPOINT = '/api/auth';
 const authApi = {
   /**
    * POST — login as admin.
-   * On success, stores the JWT token in localStorage.
+   * On success, stores the JWT token in sessionStorage.
    * @param {{ email: string, password: string }} credentials
    * @returns {Promise<{ success: boolean, data: { id: string, email: string, token: string } }>}
    */
   login: async (credentials) => {
     const { data } = await axiosInstance.post(`${ENDPOINT}/login`, credentials);
     if (data.success && data.data?.token) {
-      localStorage.setItem('token', data.data.token);
-      localStorage.setItem('admin_email', data.data.email);
+      sessionStorage.setItem('token', data.data.token);
+      sessionStorage.setItem('admin_email', data.data.email);
+      sessionStorage.setItem('admin_name', data.data.name || 'Admin');
     }
     return data;
   },
 
   /**
-   * Logout — removes the token and email from localStorage.
+   * POST — register a new admin.
+   * @param {{ email: string, password: string }} credentials
+   * @returns {Promise<{ success: boolean, message: string }>}
    */
-  logout: () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('admin_email');
+  register: async (credentials) => {
+    const { data } = await axiosInstance.post(`${ENDPOINT}/register`, credentials);
+    return data;
   },
 
   /**
-   * Get the current user email from localStorage.
+   * Logout — removes token and email and name from sessionStorage.
+   */
+  logout: () => {
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('admin_email');
+    sessionStorage.removeItem('admin_name');
+  },
+
+  /**
+   * Get the current user email from sessionStorage.
    * @returns {string | null}
    */
   getEmail: () => {
     if (typeof window === 'undefined') return null;
-    return localStorage.getItem('admin_email');
+    return sessionStorage.getItem('admin_email');
   },
 
   /**
-   * Get the current token from localStorage.
+   * Get the current user name from sessionStorage.
+   * @returns {string | null}
+   */
+  getName: () => {
+    if (typeof window === 'undefined') return null;
+    return sessionStorage.getItem('admin_name') || 'Admin';
+  },
+
+  /**
+   * Get the current token from sessionStorage.
    * @returns {string | null}
    */
   getToken: () => {
     if (typeof window === 'undefined') return null;
-    return localStorage.getItem('token');
+    return sessionStorage.getItem('token');
   },
 
   /**
@@ -53,6 +74,36 @@ const authApi = {
    */
   isAuthenticated: () => {
     return Boolean(authApi.getToken());
+  },
+
+  /**
+   * GET — fetch current admin profile details.
+   */
+  getProfile: async () => {
+    // consume API untuk endpoint /profile
+    const { data } = await axiosInstance.get(`${ENDPOINT}/profile`);
+    return data;
+  },
+
+  /**
+   * PUT — update current admin profile details.
+   */
+  updateProfile: async (profileData) => {
+    // consum API untuk edit (PUT) pada endpoint /profile
+    const { data } = await axiosInstance.put(`${ENDPOINT}/profile`, profileData);
+    if (data.success && data.data) {
+      if (data.data.email) sessionStorage.setItem('admin_email', data.data.email);
+      if (data.data.name) sessionStorage.setItem('admin_name', data.data.name);
+    }
+    return data;
+  },
+
+  /**
+   * GET — fetch public admin contact details.
+   */
+  getContact: async () => {
+    const { data } = await axiosInstance.get(`${ENDPOINT}/contact`);
+    return data;
   },
 };
 

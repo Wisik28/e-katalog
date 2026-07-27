@@ -10,10 +10,10 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('/');
 
   const NAV_LINKS = [
-    { label: 'Home', href: '/' },
-    { label: 'Categories', href: '#categories' },
-    { label: 'Products', href: '#produk' },
-    { label: 'About & Contact', href: '#footer' },
+    { label: 'Beranda', href: '/' },
+    { label: 'Kategori', href: '#categories' },
+    { label: 'Produk', href: '#produk' },
+    { label: 'Kontak Admin', href: '#footer' },
   ];
 
   // Detect active section on scroll
@@ -85,9 +85,10 @@ export default function Navbar() {
           >
             <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md relative overflow-hidden group-hover:scale-105 transition-transform duration-300">
               <Image
-                src="/logo_vivien_store.png"
+                src="/new_logo_vivien.png"
                 alt="Logo Vivien's Store"
                 fill
+                sizes="40px"
                 className="object-cover"
               />
             </div>
@@ -96,7 +97,7 @@ export default function Navbar() {
                 Vivien&apos;s Store
               </span>
               <span className="text-[10px] font-sans tracking-[0.2em] text-[#777777] uppercase font-semibold">
-                Luxurious Collection
+                Local Collection
               </span>
             </div>
           </Link>
@@ -124,7 +125,7 @@ export default function Navbar() {
 
           {/* Right Action Buttons */}
           <div className="flex items-center gap-4">
-            <Link
+            {/* <Link
               href="/admin"
               className="p-2 rounded-full text-[#777777] hover:text-[#1A1A1A] hover:bg-[#F3F3F6] transition-colors"
               title="Admin Portal"
@@ -133,14 +134,14 @@ export default function Navbar() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
-            </Link>
+            </Link> */}
 
             <a
-              href="#produk"
-              onClick={(e) => handleNavClick(e, '#produk')}
+              href="https://wa.me/6281248946053?text=Halo,%20saya%20ingin%20bertanya."
+              // onClick={(e) => handleNavClick(e, '#produk')}
               className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-[#C89B3C] hover:bg-[#B58A32] active:bg-[#9E7728] text-white text-[13px] font-semibold tracking-wider uppercase transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.02]"
             >
-              SHOP NOW
+              HUBUNGI ADMIN
             </a>
           </div>
         </div>

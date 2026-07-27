@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const connectDB = require('./src/config/db');
-const { seedAdmin } = require('./src/controllers/authController');
+// const { seedAdmin } = require('./src/controllers/authController');
 const authRoutes = require('./src/routes/authRoutes');
 const productRoutes = require('./src/routes/productRoutes');
 
@@ -11,10 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB Database
-connectDB().then(() => {
-  // Seed admin accounts if they do not exist
-  seedAdmin();
-});
+connectDB();
 
 // Middlewares
 app.use(cors({

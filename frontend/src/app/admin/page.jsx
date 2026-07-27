@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import authApi from "@/api/authApi";
 
@@ -36,34 +37,28 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 flex items-center justify-center p-4">
-      {/* Background decorations */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-violet-500/5 rounded-full blur-3xl" />
-      </div>
-
+    <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="relative w-full max-w-md">
         {/* Card */}
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+        <div className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-xl shadow-slate-100/50">
           {/* Logo & header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl relative overflow-hidden mb-4 shadow-lg shadow-purple-500/15">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full relative overflow-hidden mb-4 shadow-md shadow-slate-100">
               <Image
-                src="/logo_vivien_store.png"
+                src="/new_logo_vivien.png"
                 alt="Logo Vivien's Store"
                 fill
+                sizes="64px"
                 className="object-cover"
               />
             </div>
-            <h1 className="text-2xl font-bold text-white">Vivien&apos;s Store</h1>
-            <p className="text-slate-400 text-sm mt-1">Admin Panel — Masuk ke akun Anda</p>
+            <h1 className="text-2xl font-bold text-slate-800">Vivien&apos;s Store</h1>
+            <p className="text-slate-500 text-sm mt-1">Silahkan login untuk masuk ke dashboard Admin</p>
           </div>
 
           {/* Error alert */}
           {error && (
-            <div className="mb-5 flex items-center gap-3 bg-red-500/10 border border-red-500/20 text-red-400 text-sm px-4 py-3 rounded-xl">
+            <div className="mb-5 flex items-center gap-3 bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-3 rounded-xl animate-fade-in">
               <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
@@ -75,10 +70,10 @@ export default function AdminLoginPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div>
-              <label className="block text-slate-300 text-sm font-medium mb-2">Email</label>
+              <label className="block text-slate-600 text-sm font-medium mb-2">Email</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                   </svg>
                 </div>
@@ -89,19 +84,18 @@ export default function AdminLoginPage() {
                   value={form.email}
                   onChange={handleChange}
                   placeholder="email@domain.com"
-
                   required
-                  className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-200"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-200"
                 />
               </div>
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-slate-300 text-sm font-medium mb-2">Password</label>
+              <label className="block text-slate-600 text-sm font-medium mb-2">Password</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                 </div>
@@ -113,12 +107,12 @@ export default function AdminLoginPage() {
                   onChange={handleChange}
                   placeholder="••••••••"
                   required
-                  className="w-full pl-10 pr-11 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-200"
+                  className="w-full pl-10 pr-11 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-200"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-slate-300 transition-colors"
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
                 >
                   {showPassword ? (
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,10 +149,12 @@ export default function AdminLoginPage() {
             </button>
           </form>
 
-          {/* Hint */}
-          <p className="text-center text-slate-600 text-xs mt-6">
-            Akses terbatas untuk administrator Vivien&apos;s Store
-          </p>
+          {/* Hint & Navigation */}
+          <div className="mt-6 text-center text-sm">
+            <p className="text-slate-500 text-xs">
+              Akses terbatas untuk administrator Vivien&apos;s Store.
+            </p>
+          </div>
         </div>
       </div>
     </div>

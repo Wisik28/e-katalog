@@ -55,7 +55,7 @@ export default function BentoGrid({ onSelectCategory }) {
             Curated Styles
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1A1A] font-bold">
-            Find Your Look
+            Kategori
           </h2>
           <div className="w-12 h-0.5 bg-[#C89B3C] mx-auto mt-4 rounded-full" />
         </div>

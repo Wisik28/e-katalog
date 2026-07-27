@@ -11,10 +11,12 @@ const axiosInstance = axios.create({
   },
 });
 
-// Request interceptor: attach JWT token from localStorage if available
+// Request interceptor: attach JWT token from sessionStorage if available
+// otentiikasi token menggunakan session storage agar token hilang saat tab ditutup
+// sehingga admin harus selalu melakukan login ketika mengakses page /admin
 axiosInstance.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
