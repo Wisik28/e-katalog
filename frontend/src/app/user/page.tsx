@@ -53,9 +53,14 @@ export default function HomePage() {
               </h1>
 
 
-              <p className="text-gray-300 font-sans text-base sm:text-lg max-w-xl leading-relaxed">
-                Koleksi terkurasi busana kasual dan elegan rancangan desainer terkini. Dibuat dengan material berkualitas tinggi untuk pesona tak tertandingi.
-              </p>
+              <div className="space-y-1">
+                <p className="text-gray-300 font-sans text-base sm:text-lg max-w-xl leading-relaxed">
+                  Koleksi busana lokal minimalis dan modern
+                </p>
+                <p className="text-gray-300 font-sans text-base sm:text-lg max-w-xl leading-relaxed">
+                  Dibuat dengan material berkualitas untuk pesona tak tertandingi
+                </p>
+              </div>
 
               {/* CTAs */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
@@ -63,7 +68,7 @@ export default function HomePage() {
                   href="#produk"
                   className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#C89B3C] hover:bg-[#B58A32] active:bg-[#9E7728] text-white font-sans text-xs font-bold uppercase tracking-widest transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                 >
-                  SHOP NEW ARRIVALS
+                  BELANJA SEKARANG
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
@@ -90,7 +95,7 @@ export default function HomePage() {
               Our Products
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1A1A] font-bold">
-              Featured Pieces
+              Produk
             </h2>
             <p className="text-sm font-sans text-[#777777] mt-2">
               Jelajahi setiap pilihan busana terbaik Vivien&apos;s Store

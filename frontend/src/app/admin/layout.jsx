@@ -14,7 +14,7 @@ export default function AdminDashboardLayout({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Theme setup
+    // menyimpan tema di localStorage agar preferensi tidak terhapus/berubah ketika menutup dan membuka tab baru
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "light") {
       setIsDark(false);

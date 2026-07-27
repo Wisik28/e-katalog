@@ -158,15 +158,6 @@ export default function ProductDetailModal({ product, isOpen, onClose }) {
               </h2>
             </div>
 
-            {/* Reviews / Rating */}
-            <div className="flex items-center gap-2">
-              <div className="flex text-[#C89B3C] text-sm">
-                {'★'.repeat(5)}
-              </div>
-              <span className="text-sm font-sans font-semibold text-[#1A1A1A]">4.8</span>
-              <span className="text-xs text-[#777777] font-sans">(32 ulasan pembeli)</span>
-            </div>
-
             {/* Pricing Section */}
             <div className="flex items-center gap-3">
               <span className="text-2xl font-bold font-sans text-[#1A1A1A]">
@@ -183,28 +174,22 @@ export default function ProductDetailModal({ product, isOpen, onClose }) {
                 </>
               )}
             </div>
-
-            <div className="h-px bg-[#EBEBEF]" />
+            <div className="h-px bg-[#EBEBEF]" />            
 
             {/* Description */}
-            <p className="text-sm text-[#555555] leading-relaxed font-sans">
-              {description || 'Produk pilihan kualitas terbaik dari Vivien\'s Store. Dirancang secara presisi dengan material premium untuk memberikan kenyamanan dan penampilan kasual yang elegan.'}
-            </p>
-
-            {/* Feature Tags */}
-            <div className="flex flex-wrap gap-2 pt-1">
-              {['Bahan Premium', 'Standard Fit', 'Model Timeless', 'Garansi Kualitas'].map((tag) => (
-                <span key={tag} className="px-3 py-1 bg-[#F3F3F6] text-[#555555] rounded-full text-xs font-medium font-sans">
-                  {tag}
-                </span>
-              ))}
+            <div className="space-y-1">
+              <span className="font-bold font-sans text-[#1A1A1A] text-sm block">Deskripsi Produk:</span>
+              <p className="text-sm text-[#555555] leading-relaxed font-sans whitespace-pre-line">
+                {description}
+              </p>
             </div>
+            <div className="h-px bg-[#EBEBEF]" />
 
             {/* Color Selector */}
             {colorList.length > 0 && (
               <div className="space-y-2 pt-2">
                 <span className="text-xs font-sans font-bold uppercase tracking-wider text-[#777777] block">
-                  COLOR
+                  Warna
                 </span>
                 <div className="flex flex-wrap gap-2.5">
                   {colorList.map((c) => {
@@ -224,7 +209,7 @@ export default function ProductDetailModal({ product, isOpen, onClose }) {
             {/* Size Selector */}
             <div className="space-y-2 pt-2">
               <span className="text-xs font-sans font-bold uppercase tracking-wider text-[#777777] block">
-                SIZE
+                Ukuran
               </span>
               <div className="flex flex-wrap gap-2.5">
                 {(sizes.length > 0 ? sizes : ['S', 'M', 'L', 'XL']).map((sz) => {

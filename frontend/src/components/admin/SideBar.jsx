@@ -30,13 +30,20 @@ const navItems = [
 export default function AdminSidebar({ collapsed, setCollapsed, isDark, toggleTheme }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [userInfo, setUserInfo] = useState({ email: "" });
+  const [userInfo, setUserInfo] = useState({ email: "", name: "" });
 
   useEffect(() => {
-    setUserInfo({
-      email: authApi.getEmail() || "Administrator",
+    const updateUserInfo = () => {
+      setUserInfo({
+        email: authApi.getEmail(),
+        name: authApi.getName(),
+      });
+    };
 
-    });
+    updateUserInfo();
+
+    window.addEventListener("profileUpdated", updateUserInfo);
+    return () => window.removeEventListener("profileUpdated", updateUserInfo);
   }, []);
 
   const handleLogout = () => {
@@ -80,11 +87,12 @@ export default function AdminSidebar({ collapsed, setCollapsed, isDark, toggleTh
           onClick={() => setCollapsed(!collapsed)}
           className="flex items-center gap-3 px-5 py-5 border-b border-slate-200 dark:border-white/5 cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5"
         >
-          <div className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center relative overflow-hidden shadow-lg shadow-purple-500/10">
+          <div className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center relative overflow-hidden shadow-lg shadow-purple-500/10">
             <Image
-              src="/logo_vivien_store.png"
+              src="/new_logo_vivien.png"
               alt="Logo Vivien's Store"
               fill
+              sizes="36px"
               className="object-cover"
             />
           </div>
@@ -133,65 +141,57 @@ export default function AdminSidebar({ collapsed, setCollapsed, isDark, toggleTh
           })}
         </nav>
 
-        {/* Actions (Notification & Theme Toggle) */}
-        <div className={`px-3 py-3 border-t border-slate-200 dark:border-white/5 flex ${collapsed ? "flex-col gap-3 items-center" : "items-center justify-around"}`}>
-          {/* Notification Bell */}
-          <button 
-            className="relative w-9 h-9 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 flex items-center justify-center transition-colors"
-            title="Notifikasi"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-purple-500 rounded-full" />
-          </button>
 
-          {/* Theme Toggle Button */}
-          <button
-            onClick={toggleTheme}
-            className="w-9 h-9 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 flex items-center justify-center transition-colors"
-            title={isDark ? "Mode Terang" : "Mode Gelap"}
-          >
-            {isDark ? (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-              </svg>
-            )}
-          </button>
-        </div>
 
         {/* User & logout */}
         <div className="px-3 py-4 border-t border-slate-200 dark:border-white/5">
-          <div className={`flex items-center gap-3 px-3 py-2 mb-2 ${collapsed ? "justify-center" : ""}`}>
+          <Link
+            href="/admin/detailProfile"
+            className={`flex items-center gap-3 px-3 py-2 mb-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer text-left ${collapsed ? "justify-center" : ""}`}
+            title="Detail Profil Admin"
+          >
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold">
-              A
+              {userInfo.name ? userInfo.name.charAt(0).toUpperCase() : "A"}
             </div>
             {!collapsed && (
               <div className="overflow-hidden">
-                <p className="text-slate-900 dark:text-white text-sm font-medium truncate">Admin</p>
+                <p className="text-slate-900 dark:text-white text-sm font-medium truncate">{userInfo.name || "Admin"}</p>
                 <p className="text-slate-500 text-xs truncate">{userInfo.email}</p>                
               </div>
             )}
+          </Link>
+          <div className={`flex gap-2 mt-2 ${collapsed ? "flex-col items-center" : "flex-row items-center"}`}>
+            <button
+              id="sidebar-logout-btn"
+              onClick={handleLogout}
+              title={collapsed ? "Keluar" : ""}
+              className={`
+                flex-1 flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 
+                text-sm font-medium transition-all duration-150
+                ${collapsed ? "w-10 h-10 justify-center" : "w-full"}
+              `}
+            >
+              <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              {!collapsed && <span>Keluar</span>}
+            </button>
+            <button
+              onClick={toggleTheme}
+              className="w-10 h-10 flex-shrink-0 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 flex items-center justify-center transition-colors border border-slate-200 dark:border-white/5"
+              title={isDark ? "Mode Terang" : "Mode Gelap"}
+            >
+              {isDark ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+            </button>
           </div>
-          <button
-            id="sidebar-logout-btn"
-            onClick={handleLogout}
-            title={collapsed ? "Keluar" : ""}
-            className={`
-              w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 
-              text-sm font-medium transition-all duration-150
-              ${collapsed ? "justify-center" : ""}
-            `}
-          >
-            <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            {!collapsed && <span>Keluar</span>}
-          </button>
         </div>
       </aside>
     </>
