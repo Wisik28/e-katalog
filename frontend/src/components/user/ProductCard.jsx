@@ -12,34 +12,9 @@ function formatRupiah(amount) {
   }).format(amount);
 }
 
-// Generate a deterministic badge and rating for demo aesthetic based on product ID/name
-function getProductBadgeAndRating(product) {
-  const charCodeSum = (product._id || product.name || 'a')
-    .split('')
-    .reduce((acc, char) => acc + char.charCodeAt(0), 0);
-
-  const isSale = product.discount > 0;
-  
-  let badgeType = null;
-  if (isSale) {
-    badgeType = 'SALE';
-  } else {
-    const badges = ['BEST SELLER', 'NEW', null, null];
-    badgeType = badges[charCodeSum % badges.length];
-  }
-
-  // Rating score between 4.6 and 5.0, count between 12 and 88
-  const ratingScore = (4.6 + ((charCodeSum % 5) * 0.1)).toFixed(1);
-  const reviewCount = 12 + (charCodeSum % 77);
-
-  return { badgeType, ratingScore, reviewCount };
-}
-
 export default function ProductCard({ product, onOpenDetails }) {
   const { name, category, price, stock, imageUrl, color, material, discount } = product;
   const isOutOfStock = stock === 0;
-
-  const { badgeType, ratingScore, reviewCount } = getProductBadgeAndRating(product);
 
   const hasDiscount = discount > 0;
   const discountPercent = discount || 0;
@@ -62,24 +37,6 @@ export default function ProductCard({ product, onOpenDetails }) {
           unoptimized={!imageUrl}
         />
 
-        {/* Status Badges (Top Left) */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
-          {badgeType === 'BEST SELLER' && (
-            <span className="px-3 py-1 bg-white text-[#1A1A1A] font-sans font-bold text-[10px] tracking-wider uppercase rounded-full shadow-md border border-black/5">
-              BEST SELLER
-            </span>
-          )}
-          {badgeType === 'NEW' && (
-            <span className="px-3 py-1 bg-[#1A1A1A] text-white font-sans font-bold text-[10px] tracking-wider uppercase rounded-full shadow-md">
-              NEW
-            </span>
-          )}
-          {badgeType === 'SALE' && (
-            <span className="px-3 py-1 bg-[#C89B3C] text-white font-sans font-bold text-[10px] tracking-wider uppercase rounded-full shadow-md">
-              SALE
-            </span>
-          )}
-        </div>
 
         {/* Out of Stock Overlay */}
         {isOutOfStock && (
@@ -102,51 +59,43 @@ export default function ProductCard({ product, onOpenDetails }) {
       </div>
 
       {/* Card Content Details */}
-      <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3 sm:space-y-4">
         <div className="space-y-1.5">
           {/* Category */}
-          <span className="text-[11px] font-sans font-semibold text-[#777777] uppercase tracking-wider block">
+          <span className="text-[10px] sm:text-[11px] font-sans font-semibold text-[#777777] uppercase tracking-wider block">
             {category}
           </span>
 
           {/* Product Title */}
-          <h3 className="font-sans font-bold text-[#222222] text-base leading-snug line-clamp-2 group-hover:text-[#C89B3C] transition-colors">
+          <h3 className="font-sans font-bold text-[#222222] text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-[#C89B3C] transition-colors">
             {name}
           </h3>
 
           {/* Additional details */}
           {(color || material) && (
-            <p className="text-xs text-[#777777] font-sans truncate">
+            <p className="text-[11px] sm:text-xs text-[#777777] font-sans truncate">
               {[color, material].filter(Boolean).join(' · ')}
             </p>
           )}
 
-          {/* Rating */}
-          <div className="flex items-center gap-1.5 pt-1">
-            <div className="flex items-center text-[#C89B3C] text-xs">
-              {'★'.repeat(5)}
-            </div>
-            <span className="text-xs font-sans font-medium text-[#777777]">
-              {ratingScore} ({reviewCount})
-            </span>
-          </div>
+
         </div>
 
         {/* Price & View Details Link */}
-        <div className="pt-3 border-t border-[#EBEBEF] flex items-center justify-between">
+        <div className="pt-2.5 sm:pt-3 border-t border-[#EBEBEF] flex items-center justify-between">
           <div className="flex flex-col">
-            <span className="font-sans font-bold text-[#1A1A1A] text-lg">
+            <span className="font-sans font-bold text-[#1A1A1A] text-base sm:text-lg">
               {formatRupiah(priceAfterDiscount)}
             </span>
             {hasDiscount && (
-              <span className="text-xs text-[#999999] line-through font-sans">
+              <span className="text-[10px] sm:text-xs text-[#999999] line-through font-sans">
                 {formatRupiah(priceBeforeDiscount)}
               </span>
             )}
           </div>
 
-          <span className="inline-flex items-center gap-1 text-xs font-sans font-bold text-[#C89B3C] group-hover:translate-x-1 transition-transform duration-300">
-            View Details
+          <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-sans font-bold text-[#C89B3C] group-hover:translate-x-1 transition-transform duration-300">
+            <span className="hidden sm:inline">View Details</span>
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
             </svg>

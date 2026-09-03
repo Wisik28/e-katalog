@@ -69,7 +69,7 @@ export default function ProductList({ filters = {}, sortBy = 'newest', onOpenDet
 
   return (
     <div
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[20px] lg:gap-[24px]"
+      className="grid grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-[20px] lg:gap-[24px]"
       role="list"
       aria-label="Daftar produk"
     >

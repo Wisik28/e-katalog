@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useProduct, useUpdateProduct } from '@/hooks/useProducts';
 
-const CATEGORIES = ['Dress', 'Blouse', 'Rok', 'Kemeja', 'Outer', 'Celana', 'Tunik'];
+const CATEGORIES = ['Dress', 'Blouse', 'Rok', 'Kemeja', 'Outer', 'Celana', 'Lainnya'];
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Free Size'];
 
 export default function EditProductPage() {

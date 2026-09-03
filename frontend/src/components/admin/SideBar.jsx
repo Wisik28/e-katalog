@@ -130,11 +130,11 @@ export default function AdminSidebar({ collapsed, setCollapsed, isDark, toggleTh
                 className={`
                   flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150
                   ${isActive
-                    ? "bg-purple-50 dark:bg-gradient-to-r dark:from-purple-500/20 dark:to-pink-500/10 text-purple-600 dark:text-purple-300 border border-purple-100 dark:border-purple-500/20"
+                    ? "bg-purple-50 dark:bg-transparent dark:bg-gradient-to-r dark:from-purple-500/20 dark:to-pink-500/10 text-purple-600 dark:text-purple-200 border border-purple-100 dark:border-purple-500/20"
                     : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5"}
                 `}
               >
-                <span className={`flex-shrink-0 ${isActive ? "text-purple-600 dark:text-purple-400" : ""}`}>{item.icon}</span>
+                <span className={`flex-shrink-0 ${isActive ? "text-purple-600 dark:text-purple-300" : ""}`}>{item.icon}</span>
                 {!collapsed && <span>{item.label}</span>}
               </Link>
             );
