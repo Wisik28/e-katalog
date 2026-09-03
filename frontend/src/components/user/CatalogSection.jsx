@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import ProductList from './ProductList';
 import ProductDetailModal from './ProductDetailModal';
 
-const CATEGORIES = ['Semua', 'Dress', 'Blouse', 'Rok', 'Kemeja', 'Outer', 'Celana', 'Tunik'];
+const CATEGORIES = ['Semua', 'Dress', 'Blouse', 'Rok', 'Kemeja', 'Outer', 'Celana', 'Lainnya'];
 
 export default function CatalogSection({ externalCategory, onClearExternalCategory }) {
   const [searchVal, setSearchVal] = useState('');

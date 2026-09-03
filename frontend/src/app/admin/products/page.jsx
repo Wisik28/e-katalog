@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useProducts, useDeleteProduct } from '@/hooks/useProducts';
 
-const CATEGORIES = ['Semua', 'Dress', 'Blouse', 'Rok', 'Kemeja', 'Outer', 'Celana', 'Tunik'];
+const CATEGORIES = ['Semua', 'Dress', 'Blouse', 'Rok', 'Kemeja', 'Outer', 'Celana', 'Lainnya'];
 
 function formatRupiah(amount) {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);

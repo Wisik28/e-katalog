@@ -17,7 +17,7 @@ const authApi = {
     if (data.success && data.data?.token) {
       sessionStorage.setItem('token', data.data.token);
       sessionStorage.setItem('admin_email', data.data.email);
-      sessionStorage.setItem('admin_name', data.data.name || 'Admin');
+      sessionStorage.setItem('admin_name', data.data.name);
     }
     return data;
   },

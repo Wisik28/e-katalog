@@ -129,12 +129,7 @@ export default function ProductDetailModal({ product, isOpen, onClose }) {
             </div>
           )}
 
-          {/* Badge top-left inside image */}
-          <div className="absolute top-4 left-4 z-10">
-            <span className="px-3.5 py-1.5 bg-[#C89B3C] text-white font-sans font-bold text-xs tracking-wider uppercase rounded-full shadow-lg">
-              SALE
-            </span>
-          </div>
+
 
           {isOutOfStock && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-20">

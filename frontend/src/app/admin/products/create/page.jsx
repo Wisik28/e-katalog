@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCreateProduct } from '@/hooks/useProducts';
 
-const CATEGORIES = ['Dress', 'Blouse', 'Rok', 'Kemeja', 'Outer', 'Celana', 'Tunik'];
+const CATEGORIES = ['Dress', 'Blouse', 'Rok', 'Kemeja', 'Outer', 'Celana', 'Lainnya'];
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Free Size'];
 
 export default function CreateProductPage() {

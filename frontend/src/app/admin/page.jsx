@@ -154,6 +154,9 @@ export default function AdminLoginPage() {
             <p className="text-slate-500 text-xs">
               Akses terbatas untuk administrator Vivien&apos;s Store.
             </p>
+            <p className="text-slate-500 text-xs">
+              admin@gmail.com; admin123
+            </p>
           </div>
         </div>
       </div>

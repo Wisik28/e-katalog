@@ -11,6 +11,12 @@ const axiosInstance = axios.create({
   },
 });
 
+// hanya dijalankan ketika forward, ketika tdk disable saja dan enable yang atas
+// const axiosInstance = axios.create({
+//   baseURL: process.env.NEXT_PUBLIC_API_URL,
+// });
+
+
 // Request interceptor: attach JWT token from sessionStorage if available
 // otentiikasi token menggunakan session storage agar token hilang saat tab ditutup
 // sehingga admin harus selalu melakukan login ketika mengakses page /admin
